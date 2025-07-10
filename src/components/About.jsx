@@ -47,6 +47,7 @@ const About = () => {
             quasi, iure cupiditate. Dolore molestiae recusandae voluptate maxime
             sit voluptatibus eos cupiditate.
           </p>
+          <button className="bg-blue-600 text-white px-8 py-2 rounded">Learn More</button>
         </div>
       </div>
     </div>
