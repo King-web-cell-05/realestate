@@ -1,11 +1,37 @@
 import React from "react";
+import { useState } from 'react';
+import emailjs from 'emailjs-com';
+import {motion} from 'framer-motion';
 
-const Contact = () => {
-  return (
-    <div
-      className="text-center p-6 py-20 lg:px-32 w-full overflow-hidden"
-      id="Contact"
-    >
+export const Contact = () => {
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        message: '',
+    })
+
+    const SERVICE_ID = "service_b9hm76n"
+    const TEMPLATE_ID = "template_ig3pxz2"
+    const PUBLIC_KEY = "4qidLtHDGI5VK3nZ2"
+    const handleSubmit = (e) => {
+        e.preventDefault()
+
+        emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, e.target, PUBLIC_KEY).then((result) => {
+            alert("Message sent successfully!");
+            setFormData({name: '', email: '', message: ''}); // Reset form
+        }).catch(() => alert("Failed to send message. Please try again later.")) 
+    }
+
+    return (
+        <motion.div
+         initial={{ opacity: 0, x: -200 }}
+      transition={{ duration: 1}}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{once:true}}
+            className="text-center p-6 py-20 lg:px-32 w-full overflow-hidden"
+        >
+    
+    
       <h1 className="text-2xl sm:text-4xl font-bold mb-2 text center">
         Contact
         <span className="underline underline-offset-4 decoration-1 under font-light ml-3 ">
@@ -16,15 +42,18 @@ const Contact = () => {
         "Ready to make a move? Let's connect and turn your real estate dreams
         into reality!"
       </p>
-      <form className="max-w-2xl mx-auto text-gray-600 pt-8">
+      <form className="max-w-2xl mx-auto text-gray-600 pt-8" onSubmit={handleSubmit}>
         <div className="flex flex-wrap">
           <div className="w-full md:w-1/2 text-left">
             Your Name
             <input
               className="w-full border border-gray-300 rounded py-3 px-4 mt-2"
               type="text" name="Name"
+              id="name"
               placeholder="Your Name"
               required
+              value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             />
           </div>
           <div className="w-full md:w-1/2 text-left md:pl-4">
@@ -32,18 +61,21 @@ const Contact = () => {
             <input
               className="w-full border border-gray-300 rounded py-3 px-4 mt-2"
               type="email" name="Email"
+              id="email"
               placeholder="Your Email"
               required
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             />
           </div>
         </div>
         <div className="my-6 text-left">
             Message
-            <textarea className="w-full border border-gray-300 rounded py-3 px-4 mt-2" name="Message" placeholder="Message" required></textarea>
+            <textarea className="w-full border border-gray-300 rounded py-3 px-4 mt-2" rows={6} name="Message" id="message" placeholder="Message" required value={formData.message} onChange={(e) => setFormData({ ...formData, message: e.target.value })}></textarea>
         </div>
-        <button className="bg-blue-600 text-white py-2 px-12 mb-10 rounded">Send Message </button>
+        <button className="bg-blue-600 text-white py-2 px-12 mb-10 rounded" type="submit">Send Message </button>
       </form>
-    </div>
+    </motion.div>
   );
 };
 
